@@ -1,0 +1,34 @@
+version: "3.7"
+
+networks:
+  academia-network:
+    name: academia-network
+services:
+  mongo:
+    image: mongo:4.2.0
+    container_name: academia-mongo
+    volumes:
+      - "./storage/data/mongodb:/data/db"
+    networks:
+      academia-network:
+    ports:
+      - "27017:27017"
+    hostname: academia-mongo
+    restart: always
+
+  postgres:
+    image: postgres:12
+    container_name: academia-postgres
+    environment: 
+      - PGDATABASE=${PSQL_DATABASE}
+      - POSTGRES_USER=${PSQL_USERNAME}
+      - POSTGRES_PASSWORD=${PSQL_PASSWORD}
+    volumes:
+       - "./storage/data/postgres:/data/postgres"
+    networks:
+      academia-network:
+    ports:
+      - "${PSQL_PORT}:5432"
+    hostname: academia-postgres
+    restart: always
+
